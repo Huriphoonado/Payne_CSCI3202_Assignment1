@@ -49,82 +49,116 @@ class Stack(object):
 
 # 3. Implement a Binary Tree
 
-# Node class to be used within the binary tree
 class Node(object):
-	def __init__(self, key, leftChild, rightChild, parent):
-		self.key = key
-		self.leftChild = leftChild
-		self.rightChild = rightChild
-		self.parent = parent
+	def __init__(self, key, parent):
+		self.key = key # Integer key value
+		self.leftChild = None # Node left child
+		self.rightChild = None # Node left child
+		self.parent = parent # Node parent added to
 
 class Binary_Tree(object):
-	# Tree begins with only a root node
-	# Implemented using a python dictionary with node key as the key
-	# Root of binary tree has key of 0
+	# Initialize the tree with a root node of key value 0
 	def __init__(self):
-		self.binary_tree = {0: Node(0, None, None, None)}
-	
-	# Add a new node to the tree given a parent node and key value
-	def add(self, key, parent):
-		if parent in self.binary_tree:
-			# If left node is empty - make that the child node
-			if self.binary_tree[parent].leftChild == None:
-				self.binary_tree[parent].leftChild = key
-				self.binary_tree[key] = Node(key, None, None, parent)
-			# If right node is empty - make that the child node
-			elif self.binary_tree[parent].rightChild == None:
-				self.binary_tree[parent].rightChild = key
-				self.binary_tree[key] = Node(key, None, None, parent)
-			else:
-				print "Parent has two childen, node not added."
-		else:
-			print "Parent not found."
+		self.rootNode = Node(0, None)
 
-	# Removes a node from the tree and makes sure the node is no longer listed as a child
-	def delete(self, key):
-		if key in self.binary_tree:
-			if self.binary_tree[key].leftChild != None or self.binary_tree[key].rightChild != None:
-				print("Node not deleted, has children.")
-			else:
-				current_parent = self.binary_tree[key].parent
-				
-				# first set the correct node of the parent to None
-				if self.binary_tree[current_parent].leftChild == key:
-					self.binary_tree[current_parent].leftChild = None
+	# Adds a node to the tree
+	# 	1. Searches through the tree to find the parent node
+	# 	2. If parent found, node is inputted into avaible child spot - left then right
+	#	3. New child is initialized with given key and newfound parent
+	def add(self, value, parentValue):
+		# gets set to 1 if the parent node is found anywhere
+		# within the recursive function calls
+		global nodeFound
+		nodeFound = 0
+		
+		# Helper function called with the root node of the tree
+		def addHelper(value, parentValue, parentNode):
+			global nodeFound
+			if parentNode.key == parentValue: # we have found a match
+				if parentNode.leftChild == None:
+					parentNode.leftChild = Node(value, parentNode)
+					nodeFound = 1
+					return
+				elif parentNode.rightChild == None:
+					parentNode.rightChild = Node(value, parentNode)
+					nodeFound = 1
+					return
 				else:
-					self.binary_tree[current_parent].rightChild = None
+					print "Parent has two childen, node not added."
+					nodeFound = 1
+					return
+			else: # search through the rest of the tree
+				if parentNode.leftChild != None:
+					addHelper(value, parentValue, parentNode.leftChild)
+				if parentNode.rightChild != None:
+					addHelper(value, parentValue, parentNode.rightChild)
+				elif parentNode.leftChild == None and parentNode.rightChild == None:
+					return
+		
+		# Call the helper function
+		addHelper(value, parentValue, self.rootNode)
+		if nodeFound == 0:
+			print "Parent not found"
 
-				# then remove the node from the binary tree
-				del self.binary_tree[key]
-		else:
-			print "Node not found."
+	# Remove a node from the tree
+	# 	1. Searches through the tree to find the given node
+	# 	2. If node found, make sure it has no children
+	# 	3. Node is removed by setting its parent's child parameter back to None
+	def delete(self, value):
+		global nodeFound
+		nodeFound = 0
 
-	# Prints the entire tree starting with the root node
-	# pre_order traversal implemented with recursion
+		def deleteHelper(value, currentNode):
+			global nodeFound
+			if currentNode.key == value: # we found a match
+				# correct node has children -> stop
+				if currentNode.leftChild != None or currentNode.rightChild != None:
+					nodeFound = 1
+					print "Node not deleted, has children."
+					return
+				else: # Correct node has no children -> delete
+					nodeFound = 1
+					if currentNode.parent.leftChild.key == currentNode.key:
+						currentNode.parent.leftChild = None
+						return
+					else:
+						currentNode.parent.rightChild = None
+						return
+			else: # look through the rest of the tree
+				if currentNode.leftChild != None:
+					deleteHelper(value, currentNode.leftChild)
+				if currentNode.rightChild != None:
+					deleteHelper(value, currentNode.rightChild)
+				elif currentNode.leftChild == None and currentNode.rightChild == None:
+					return
+
+		deleteHelper(value, self.rootNode)
+		if nodeFound == 0:
+			print "Parent not found"
+
+	# Print the entire tree via pre-order traversal
 	def printTree(self):
-		# helper function that can be called with the key of the current node
-		def printTreeHelper(key):
+		# helper function that can be called with the root node
+		def printTreeHelper(currentNode):
 			# first print center node
-			print self.binary_tree[key].key,
-			if self.binary_tree[key].leftChild != None:
-				# then call with left node
-				printTreeHelper(self.binary_tree[key].leftChild)
-			if self.binary_tree[key].rightChild != None:
-				# then call with right node
-				printTreeHelper(self.binary_tree[key].rightChild)
+			print currentNode.key,
+			if currentNode.leftChild != None: # then call with left node
+				printTreeHelper(currentNode.leftChild)
+			if currentNode.rightChild != None: # then call with right node
+				printTreeHelper(currentNode.rightChild)
 
 		# Call the print tree function with the root node
 		print "Nodes:",
-		printTreeHelper(0)
+		printTreeHelper(self.rootNode)
 		print ""
 
 # -------------------------------------------------------------
 
 # 4. Implement an unweighted graph using a dictionary
 
-# graph consists of a dictionary of key-value pairs
-# 	keys are integers representing vertices
-# 	values are lists representing adjacent vertices
+# Graph consists of a dictionary of key-value pairs
+# 	Keys are integers representing vertices
+# 	Values are lists representing adjacent vertices
 class Graph(object):
 	def __init__(self):
 		self.vertices = dict()
@@ -160,8 +194,6 @@ class Graph(object):
 
 # Tests
 
-# -------------------------------------------------------------
-
 # 1. Queue
 
 # Make a new queue
@@ -179,7 +211,7 @@ my_queue.add_int(8)
 my_queue.add_int(9)
 my_queue.add_int(10)
 
-# # Since queue is FIFO - values should print in reverse order of being added
+# # Since queue is FIFO - values should print in order of being added
 print "Dequeued Values:",
 print my_queue.dequeue(), my_queue.dequeue(), my_queue.dequeue(), my_queue.dequeue(), 
 print my_queue.dequeue(), my_queue.dequeue(), my_queue.dequeue(), my_queue.dequeue(),
@@ -207,7 +239,7 @@ my_stack.push(10)
 # Size of stack should be 10 
 print "Stack Size:", my_stack.checkSize()
 
-# Since stack is FIFO - values should print in order of being added
+# Since stack is LIFO - values should print in reverse order of being added
 print "Popped Values:", my_stack.pop(), my_stack.pop(), my_stack.pop(), my_stack.pop(), my_stack.pop(), 
 print my_stack.pop(), my_stack.pop(), my_stack.pop(), my_stack.pop(), my_stack.pop()
 
@@ -221,6 +253,7 @@ myTree = Binary_Tree()
 # Add nodes to the tree (left to right and then down)
 myTree.add(1, 0)
 myTree.add(2, 0)
+myTree.add(3, 0)
 myTree.add(3, 1)
 myTree.add(4, 1)
 myTree.add(5, 2)
