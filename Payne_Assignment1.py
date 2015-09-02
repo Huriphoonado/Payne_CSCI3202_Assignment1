@@ -253,7 +253,7 @@ myTree = Binary_Tree()
 # Add nodes to the tree (left to right and then down)
 myTree.add(1, 0)
 myTree.add(2, 0)
-myTree.add(3, 0)
+myTree.add(3, 0) # should print an error since root node already has two children
 myTree.add(3, 1)
 myTree.add(4, 1)
 myTree.add(5, 2)
