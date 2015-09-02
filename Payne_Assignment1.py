@@ -193,6 +193,8 @@ class Graph(object):
 # -------------------------------------------------------------
 
 # Tests
+# (Commented tests work, but were not called for in the assignment directions
+#	so I commented them out for the submission.)
 
 # 1. Queue
 
@@ -237,7 +239,7 @@ my_stack.push(9)
 my_stack.push(10)
 
 # Size of stack should be 10 
-print "Stack Size:", my_stack.checkSize()
+#print "Stack Size:", my_stack.checkSize()
 
 # Since stack is LIFO - values should print in reverse order of being added
 print "Popped Values:", my_stack.pop(), my_stack.pop(), my_stack.pop(), my_stack.pop(), my_stack.pop(), 
@@ -253,7 +255,7 @@ myTree = Binary_Tree()
 # Add nodes to the tree (left to right and then down)
 myTree.add(1, 0)
 myTree.add(2, 0)
-myTree.add(3, 0) # should print an error since root node already has two children
+#myTree.add(3, 0) # should print an error since root node already has two children
 myTree.add(3, 1)
 myTree.add(4, 1)
 myTree.add(5, 2)
@@ -262,13 +264,13 @@ myTree.add(7, 3)
 myTree.add(8, 3)
 myTree.add(9, 4)
 myTree.add(10, 4)
-myTree.add(19, 11) # should print an error since 11 does not exist
+#myTree.add(19, 11) # should print an error since 11 does not exist
 myTree.printTree()
 
 # Remove nodes
 myTree.delete(7) # removes leftmost node on the bottom
 myTree.delete(9) # removes second-to-right most node on bottom
-myTree.delete(4) # should return an error since node has a child
+#myTree.delete(4) # should return an error since node has a child
 myTree.printTree()
 
 # -------------------------------------------------------------
@@ -302,11 +304,22 @@ myGraph.addEdge(1, 9)
 myGraph.addEdge(2, 4)
 myGraph.addEdge(2, 6)
 myGraph.addEdge(2, 8)
-myGraph.addEdge(9, 11) # should print error since 11 does not exist
+myGraph.addEdge(3, 4)
+myGraph.addEdge(3, 5)
+myGraph.addEdge(3, 6)
+myGraph.addEdge(3, 7)
+myGraph.addEdge(3, 8)
+myGraph.addEdge(3, 9)
+myGraph.addEdge(4, 5)
+myGraph.addEdge(4, 6)
+myGraph.addEdge(4, 7)
+myGraph.addEdge(4, 8)
+myGraph.addEdge(4, 9)
+#myGraph.addEdge(9, 11) # should print error since 11 does not exist
 
 # Print vertices and edges
 myGraph.findVertex(1) # should have 8 edges
 myGraph.findVertex(2) # should have 4 edges
-myGraph.findVertex(3) # should have 1 edge
-myGraph.findVertex(4) # should have 2 edges
+myGraph.findVertex(3) # should have 7 edges
+myGraph.findVertex(4) # should have 8 edges
 myGraph.findVertex(10) # should have 0 edges
